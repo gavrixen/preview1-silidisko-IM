@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📷 Check-in // Silid Isko</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+
+        /* ════════════════════════════════════════════════════════════════
+           CHECKIN PAGE — STYLES
+           All styles are self-contained in this block.
+           Design tokens mirror style.css for visual consistency.
+           ════════════════════════════════════════════════════════════════ */
+
+        /* ── Reset & Base ──────────────────────────────────────────────── */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-cream:      #F0EDE6;
+            --bg-header:     #1A1A1A;
+            --text-dark:     #1A1A1A;
+            --text-mid:      #555;
+            --text-light:    #888;
+            --nav-h:         68px;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--bg-cream);
+            font-family: 'Epilogue', sans-serif;
+            color: var(--text-dark);
+            overscroll-behavior: none;
+        }
+
+        /* ── Site Header ───────────────────────────────────────────────── */
+        .site-header {
+            background-color: var(--bg-header);
+            color: #fff;
+            padding: 16px 20px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 40px;
+            margin-bottom: 4px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            background: #fff;
+            color: var(--bg-header);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .brand-name {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 4px;
+        }
+
+        .menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #fff;
+            border-radius: 2px;
+        }
+
+        .back-link {
+            display: block;
+            color: #aaa;
+            font-size: 12px;
+            text-decoration: none;
+            margin-top: 20px;
+            margin-bottom: 16px;
+        }
+
+        .back-link:hover { color: #fff; }
+
+        .page-title {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .page-title-icon {
+            background: #fff;
+            color: var(--bg-header);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .page-title h1 {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+        }
+
+        /* ── Main Scroll Area ──────────────────────────────────────────── */
+        .checkin-scroll {
+            padding: 20px 20px calc(var(--nav-h) + 24px);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        /* ── Instruction label ─────────────────────────────────────────── */
+        .checkin-instruction {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-mid);
+            text-align: center;
+            letter-spacing: 0.01em;
+            padding: 0 4px;
+        }
+
+        /* ── Scanner card ──────────────────────────────────────────────── */
+        .scanner-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 20px;
+            width: 100%;
+            height: 500px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+
+        /* Override html5-qrcode's injected styles to fit the card cleanly */
+        #reader {
+            width: 100% !important;
+            border: none !important;
+        }
+
+        #reader > * {
+            border: none !important;
+        }
+
+        /* The inner scan box border injected by the library */
+        #reader__scan_region {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        #reader__scan_region > img {
+            display: none !important; /* hide the default QR icon image */
+        }
+
+        #reader__dashboard {
+            padding-top: 12px !important;
+        }
+
+        #reader__dashboard_section_swaplink {
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 12px !important;
+            color: var(--text-mid) !important;
+        }
+
+        #reader__filescan_input {
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 13px !important;
+        }
+
+        /* The "Start Scanning" / "Stop Scanning" button injected by the library */
+        #reader__dashboard_section_csr button,
+        #reader__dashboard_section_fsr button {
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 14px !important;
+            font-weight: 700 !important;
+            background: var(--bg-header) !important;
+            color: #fff !important;
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 11px 22px !important;
+            cursor: pointer !important;
+            margin-top: 8px !important;
+            transition: opacity 0.15s ease !important;
+        }
+
+        #reader__dashboard_section_csr button:hover,
+        #reader__dashboard_section_fsr button:hover {
+            opacity: 0.85 !important;
+        }
+
+        /* Select camera dropdown injected by the library */
+        #reader__camera_selection {
+            font-family: 'Epilogue', sans-serif !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: var(--text-dark) !important;
+            background: #F7F6F3 !important;
+            border: 1.5px solid #E0DDD6 !important;
+            border-radius: 10px !important;
+            padding: 9px 12px !important;
+            width: 100% !important;
+            margin-bottom: 8px !important;
+            outline: none !important;
+        }
+
+        /* ── Bottom Navigation Bar ─────────────────────────────────────── */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            background: var(--bg-header);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 200;
+            padding-bottom: env(safe-area-inset-bottom, 0);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.15s ease, background 0.15s ease;
+        }
+
+        .nav-item.active,
+        .nav-item:hover {
+            color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ── Modal overlay ─────────────────────────────────────────────── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 300;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* ── Modal sheet ───────────────────────────────────────────────── */
+        .modal-sheet {
+            position: relative;
+            background: #fff;
+            border-radius: 24px 24px 0 0;
+            width: 100%;
+            max-width: 480px;
+            padding: 0 20px 32px;
+            transform: translateY(24px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.open .modal-sheet {
+            transform: translateY(0);
+        }
+
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: #E0DDD6;
+            border-radius: 2px;
+            margin: 12px auto 20px;
+        }
+
+        /* ── Modal icon badge ──────────────────────────────────────────── */
+        .modal-icon-badge {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .modal-icon-badge.success {
+            background: #D4EDDA;
+            color: #1A7A3A;
+        }
+
+        .modal-icon-badge.error {
+            background: #FDECEA;
+            color: #C62828;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-mid);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ── Modal detail rows ─────────────────────────────────────────── */
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #EEEBE6;
+            width: 100%;
+        }
+
+        .modal-row:last-of-type {
+            border-bottom: none;
+        }
+
+        .modal-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-mid);
+            flex-shrink: 0;
+        }
+
+        .modal-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: right;
+            word-break: break-all;
+        }
+
+        /* ── Modal action button ───────────────────────────────────────── */
+        .modal-action-btn {
+            width: 100%;
+            background: var(--bg-header);
+            color: #fff;
+            font-family: 'Epilogue', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+            border: none;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            letter-spacing: -0.01em;
+            transition: opacity 0.15s ease, transform 0.1s ease;
+        }
+
+        .modal-action-btn:active {
+            opacity: 0.85;
+            transform: scale(0.985);
+        }
+
+        /* Outlined secondary button for "Try again" */
+        .modal-secondary-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--text-dark);
+            font-family: 'Epilogue', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            border: 1.5px solid #E0DDD6;
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 10px;
+            cursor: pointer;
+            letter-spacing: -0.01em;
+            transition: border-color 0.15s ease, transform 0.1s ease;
+        }
+
+        .modal-secondary-btn:active {
+            transform: scale(0.985);
+            border-color: #aaa;
+        }
+
+        /* ── Modal close button ────────────────────────────────────────── */
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: #F0EDE6;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-mid);
+            font-size: 18px;
+            line-height: 1;
+        }
+
+    </style>
+
+</head>
+
+<!-- ════════════════════════════════════════════════════
+     END OF STYLES — HTML CONTENT BEGINS BELOW
+     ════════════════════════════════════════════════════ -->
+
+<body>
+
+    <!-- ── Site Header ─────────────────────────────────────────────── -->
+    <header class="site-header">
+        <div class="header-top">
+            <div class="brand">
+                <span class="brand-icon">
+                    <iconify-icon icon="pinhead:room" width="18" height="18"></iconify-icon>
+                </span>
+                <span class="brand-name">Silid Isko</span>
+            </div>
+            <!-- TODO: Hamburger menu — opens nav drawer (not yet built) -->
+            <button class="menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <a href="index.html" class="back-link">&#8249; Back to homepage</a>
+
+        <div class="page-title">
+            <div class="page-title-icon">
+                <iconify-icon icon="ion:qr-code" width="22" height="22"></iconify-icon>
+            </div>
+            <h1>QR Code<br>Check-in</h1>
+        </div>
+    </header>
+
+    <!-- ── Main Scroll Area ─────────────────────────────────────────── -->
+    <main class="checkin-scroll">
+
+        <p class="checkin-instruction">
+            Point your camera at the reservation QR code to check in.
+        </p>
+
+        <!-- Scanner Card -->
+        <div class="scanner-card">
+            <div id="reader"></div>
+        </div>
+
+    </main>
+
+    <!-- ── Success Modal ────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-success" role="dialog" aria-modal="true" aria-labelledby="success-title">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <button class="modal-close" id="success-close" aria-label="Close">&times;</button>
+
+            <div class="modal-icon-badge success">
+                <iconify-icon icon="mingcute:check-fill" width="28" height="28"></iconify-icon>
+            </div>
+            <div class="modal-title" id="success-title">Check-in successful!</div>
+            <div class="modal-subtitle">Your reservation has been confirmed. The room is now marked as occupied.</div>
+
+            <div class="modal-row">
+                <span class="modal-label">Reservation ID</span>
+                <!-- Populated by JS when scan succeeds -->
+                <span class="modal-value" id="success-reservation-id">—</span>
+            </div>
+            <div class="modal-row">
+                <span class="modal-label">Status</span>
+                <span class="modal-value" style="color:#1A7A3A;">Occupied</span>
+            </div>
+
+            <!-- TODO: Once backend is connected, populate room name, time slot,
+                 and professor name here from the API response. -->
+
+            <button class="modal-action-btn" onclick="window.location.href='index.html'">
+                Go to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- ── Failure Modal ────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-error" role="dialog" aria-modal="true" aria-labelledby="error-title">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <button class="modal-close" id="error-close" aria-label="Close">&times;</button>
+
+            <div class="modal-icon-badge error">
+                <iconify-icon icon="mingcute:close-fill" width="28" height="28"></iconify-icon>
+            </div>
+            <div class="modal-title" id="error-title">Check-in failed</div>
+            <div class="modal-subtitle" id="error-message">
+                The QR code could not be recognised. Please make sure you're scanning a valid Silid Isko reservation QR code.
+            </div>
+
+            <button class="modal-action-btn" id="try-again-btn">
+                Try again
+            </button>
+            <button class="modal-secondary-btn" onclick="window.location.href='index.html'">
+                Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <!-- ── Bottom Navigation Bar ────────────────────────────────────── -->
+    <nav class="bottom-nav">
+        <!-- TODO: Update href to Schedules page once built -->
+        <a href="scheds.html" class="nav-item" aria-label="Schedules">
+            <iconify-icon icon="typcn:calendar" width="24" height="24"></iconify-icon>
+        </a>
+        <a href="reserve.html" class="nav-item" aria-label="Reservation">
+            <iconify-icon icon="fluent:note-add-16-filled" width="24" height="24"></iconify-icon>
+        </a>
+        <!-- Active: QR Check-in -->
+        <a href="logs.html" class="nav-item active" aria-label="QR Check-in">
+            <iconify-icon icon="ion:qr-code" width="24" height="24"></iconify-icon>
+        </a>
+        <!-- TODO: Update href to History & Logs page once built -->
+        <a href="#" class="nav-item" aria-label="History and Logs">
+            <iconify-icon icon="mingcute:history-fill" width="24" height="24"></iconify-icon>
+        </a>
+        <a href="avail.html" class="nav-item" aria-label="Room Availability">
+            <iconify-icon icon="material-symbols:map" width="24" height="24"></iconify-icon>
+        </a>
+    </nav>
+
+    <!-- ════════════════════════════════════════════════════
+         END OF HTML — JAVASCRIPT BEGINS BELOW
+         ════════════════════════════════════════════════════ -->
+    <script>
+
+        /* ── Modal helpers ──────────────────────────────────────────────── */
+        function openModal(id) {
+            document.getElementById(id).classList.add('open');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('open');
+        }
+
+        // Close modals on backdrop click
+        document.getElementById('modal-success').addEventListener('click', function(e) {
+            if (e.target === this) closeModal('modal-success');
+        });
+        document.getElementById('modal-error').addEventListener('click', function(e) {
+            if (e.target === this) closeModal('modal-error');
+        });
+
+        // Close buttons
+        document.getElementById('success-close').addEventListener('click', () => closeModal('modal-success'));
+        document.getElementById('error-close').addEventListener('click', () => closeModal('modal-error'));
+
+        /* ── Scanner ────────────────────────────────────────────────────── */
+        let html5QrcodeScanner;
+
+        function initScanner() {
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "reader",
+                { fps: 10, qrbox: 250 },
+                /* verbose= */ false
+            );
+            html5QrcodeScanner.render(onScanSuccess, onScanError);
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Stop the scanner after a successful scan
+            html5QrcodeScanner.clear();
+
+            // Log the captured reservation ID for debugging
+            console.log(`Reservation ID captured: ${decodedText}`);
+
+            // Populate the success modal with the scanned reservation ID
+            document.getElementById('success-reservation-id').textContent = decodedText;
+
+            /* TODO: Send reservation_id to backend to mark the room as occupied.
+               Replace the fetch URL with your partner's PHP endpoint.
+
+            fetch('your-backend-endpoint.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reservation_id: decodedText })
+            })
+            .then(res => res.json())
+            .then(data => {
+                // TODO: Call setRoomStatus(roomId, 'occupied') once shared state
+                // between pages is implemented (localStorage, shared module, or backend).
+                // The roomId should come from the backend response.
+                openModal('modal-success');
+            })
+            .catch(err => {
+                console.error('Backend error:', err);
+                showErrorModal('Could not connect to the server. Please try again.');
+            });
+            */
+
+            // Placeholder success — remove this line once the real fetch above is wired up
+            openModal('modal-success');
+        }
+
+        function onScanError(errorMessage) {
+            // This fires continuously while no QR is in frame — intentionally ignored.
+            // Only surface an error if the scanner itself fails to initialise.
+        }
+
+        function showErrorModal(message) {
+            if (message) {
+                document.getElementById('error-message').textContent = message;
+            }
+            openModal('modal-error');
+        }
+
+        // "Try again" — close error modal and reinitialise the scanner
+        document.getElementById('try-again-btn').addEventListener('click', function() {
+            closeModal('modal-error');
+            // Small delay lets the modal animate out before the scanner restarts
+            setTimeout(initScanner, 300);
+        });
+
+        /* ── Init on page load ──────────────────────────────────────────── */
+        initScanner();
+
+    </script>
+
+</body>
+</html>

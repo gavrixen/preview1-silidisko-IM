@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📅 Schedules // Silid Isko</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════════════ */
+:root {
+    --bg-cream:    #F0EDE6;
+    --bg-header:   #1A1A1A;
+    --text-dark:   #1A1A1A;
+    --text-mid:    #555;
+    --text-light:  #888;
+    --nav-h:       68px;
+
+    --avail-bg:     #D4EDDA;
+    --avail-icon:   #4CAF7D;
+    --avail-text:   #1A7A3A;
+    --avail-border: #A8D5B5;
+
+    --res-bg:     #FFF3CC;
+    --res-icon:   #E6B800;
+    --res-text:   #7A5A00;
+    --res-border: #F0D878;
+
+    --occ-bg:     #EDEDED;
+    --occ-icon:   #999;
+    --occ-text:   #555;
+    --occ-border: #D0D0D0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Epilogue', sans-serif;
+    background: var(--bg-cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SITE HEADER (sticky)
+   ═══════════════════════════════════════════════════════ */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-header);
+    color: #fff;
+    padding: 0 16px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.brand-icon {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.back-link {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    padding-bottom: 8px;
+    letter-spacing: 0.1px;
+}
+
+.back-link:hover { color: rgba(255,255,255,0.9); }
+
+.header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0 18px;
+}
+
+.header-title-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.header-title-text {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN SCROLL AREA
+   ═══════════════════════════════════════════════════════ */
+.sched-scroll {
+    padding: 20px 16px calc(var(--nav-h) + 24px);
+    min-height: calc(100vh - 140px);
+}
+
+.date-heading {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.sched-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCHEDULE CARD  (icon wrap removed)
+   ═══════════════════════════════════════════════════════ */
+.sched-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 14px;
+    border: 1.5px solid #E8E4DC;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.sched-card:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
+/* Time label block */
+.sched-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 52px;
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 8px 6px;
+    flex-shrink: 0;
+    border: 1.5px solid #DDD9D0;
+}
+
+.sched-time .time-hhmm {
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+.sched-time .time-ampm {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-mid);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+/* Card body text */
+.sched-body {
+    flex: 1;
+    min-width: 0;
+    padding-right: 4px;
+    padding-bottom: 16px; /* clears the status label */
+}
+
+.sched-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+
+.sched-details {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Status label (bottom-right) */
+.sched-status-label {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 3px 8px;
+}
+
+.sched-card.available .sched-status-label {
+    background: var(--avail-bg);
+    color: var(--avail-text);
+    border: 1px solid var(--avail-border);
+}
+.sched-card.reserved .sched-status-label {
+    background: var(--res-bg);
+    color: var(--res-text);
+    border: 1px solid var(--res-border);
+}
+.sched-card.occupied .sched-status-label {
+    background: var(--occ-bg);
+    color: var(--occ-text);
+    border: 1px solid var(--occ-border);
+}
+
+/* ═══════════════════════════════════════════════════════
+   DETAIL MODAL (bottom sheet)
+   ═══════════════════════════════════════════════════════ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.modal-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 201;
+    background: #fff;
+    border-radius: 22px 22px 0 0;
+    padding: 0 0 calc(var(--nav-h) + 8px);
+    max-height: 88vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+.modal-sheet.open {
+    transform: translateY(0);
+}
+
+/* Drag handle */
+.modal-handle {
+    width: 38px;
+    height: 4px;
+    background: #DDD;
+    border-radius: 4px;
+    margin: 14px auto 0;
+}
+
+/* Modal header band — colored by status */
+.modal-header-band {
+    margin: 14px 16px 0;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.modal-header-band.available { background: var(--avail-bg); }
+.modal-header-band.reserved  { background: var(--res-bg); }
+.modal-header-band.occupied  { background: var(--occ-bg); }
+
+.modal-band-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 8px 10px;
+    flex-shrink: 0;
+    min-width: 58px;
+}
+
+.modal-band-time .mbt-hhmm {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.5px;
+    color: var(--text-dark);
+}
+
+.modal-band-time .mbt-ampm {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-mid);
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+.modal-band-text { flex: 1; }
+
+.modal-band-title {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--text-dark);
+    margin-bottom: 4px;
+}
+
+.modal-band-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-mid);
+}
+
+/* Modal status pill inside band */
+.modal-status-pill {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 4px 10px;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.modal-header-band.available .modal-status-pill { background: var(--avail-icon); color: #fff; }
+.modal-header-band.reserved  .modal-status-pill { background: var(--res-icon);   color: #fff; }
+.modal-header-band.occupied  .modal-status-pill { background: #777;              color: #fff; }
+
+/* Section label above room blocks */
+.modal-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 18px 16px 8px;
+}
+
+/* Individual room block */
+.modal-room-block {
+    margin: 0 16px 10px;
+    border-radius: 14px;
+    border: 1.5px solid #E8E4DC;
+    overflow: hidden;
+}
+
+.modal-room-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid #F0EDE6;
+}
+
+.modal-room-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.modal-room-type {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-light);
+}
+
+.modal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid #F0EDE6;
+}
+
+.modal-row:last-child { border-bottom: none; }
+
+.modal-row-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.modal-row-value {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: right;
+}
+
+/* Free / general note block */
+.modal-note-block {
+    margin: 0 16px 10px;
+    border-radius: 14px;
+    border: 1.5px solid #E8E4DC;
+    padding: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-mid);
+    text-align: center;
+}
+
+/* Close button */
+.modal-close-btn {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 10px 16px 0;
+    padding: 14px;
+    background: var(--bg-header);
+    color: #fff;
+    font-family: 'Epilogue', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTTOM NAVIGATION BAR
+   ═══════════════════════════════════════════════════════ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-h);
+    background: var(--bg-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    z-index: 100;
+}
+
+.nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.45);
+    padding: 8px 0;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.nav-btn.active { color: #fff; }
+
+.nav-btn iconify-icon { font-size: 24px; }
+
+</style>
+
+<!-- ════════════════════════════════════════════════════
+     END OF STYLES — HTML CONTENT BEGINS BELOW
+     ════════════════════════════════════════════════════ -->
+
+<body>
+
+    <!-- ── SITE HEADER ─────────────────────────────── -->
+    <header class="site-header">
+        <div class="header-top">
+            <a href="#" class="brand">
+                <div class="brand-icon">
+                    <iconify-icon icon="pinhead:room" width="18" style="color:#1A1A1A;"></iconify-icon>
+                </div>
+                <span class="brand-name">Silid Isko</span>
+            </a>
+            <button class="hamburger-btn" aria-label="Menu">
+                <iconify-icon icon="mingcute:menu-line" width="22"></iconify-icon>
+            </button>
+        </div>
+
+        <a href="index.html" class="back-link">&lt; Back to homepage</a>
+
+        <div class="header-title-row">
+            <div class="header-title-icon">
+                <iconify-icon icon="typcn:calendar" width="22" style="color:#fff;"></iconify-icon>
+            </div>
+            <div class="header-title-text">Room<br>Schedules</div>
+        </div>
+    </header>
+
+    <!-- ── MAIN SCROLL AREA ────────────────────────── -->
+    <main class="sched-scroll">
+        <div class="date-heading" id="date-heading"></div>
+        <div class="sched-list" id="sched-list"></div>
+    </main>
+
+    <!-- ── DETAIL MODAL ────────────────────────────── -->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-sheet" id="modal-sheet" role="dialog" aria-modal="true">
+        <div class="modal-handle"></div>
+        <div id="modal-content"></div>
+        <button class="modal-close-btn" id="modal-close-btn">Close</button>
+    </div>
+
+    <!-- ── BOTTOM NAVIGATION BAR ───────────────────── -->
+    <nav class="bottom-nav">
+        <a href="scheds.html" class="nav-btn active" aria-label="Schedules">
+            <iconify-icon icon="typcn:calendar"></iconify-icon>
+        </a>
+        <a href="reserve.html" class="nav-btn" aria-label="Reservation">
+            <iconify-icon icon="fluent:note-add-16-filled"></iconify-icon>
+        </a>
+        <a href="#" class="nav-btn" aria-label="QR Check-in">
+            <iconify-icon icon="ion:qr-code"></iconify-icon>
+        </a>
+        <a href="logs.html" class="nav-btn" aria-label="History & Logs">
+            <iconify-icon icon="mingcute:history-fill"></iconify-icon>
+        </a>
+        <a href="avail.html" class="nav-btn" aria-label="Room Availability">
+            <iconify-icon icon="material-symbols:map"></iconify-icon>
+        </a>
+    </nav>
+
+<!-- ════════════════════════════════════════════════════
+     END OF HTML — JAVASCRIPT BEGINS BELOW
+     ════════════════════════════════════════════════════ -->
+<script>
+
+// TODO: Replace this hardcoded array with a fetch() call to schedules.php
+// when the backend API is ready. Each object should map to the API response shape.
+// The `rooms` array inside each entry will come from a JOIN query on the reservations
+// table, grouped by time slot. Each room object maps to one reservation row.
+const scheduleData = [
+    {
+        time: "07:00 AM",
+        title: "All rooms free",
+        details: "Campus open at 7AM",
+        status: "available",
+        rooms: [] // No reservations — modal will show a free-period note
+    },
+    {
+        time: "08:00 AM",
+        title: "RM 303 Occupied",
+        details: "Prof. Santos | DIT 2-1",
+        status: "occupied",
+        rooms: [
+            { room: "RM 303", type: "Computer Lab", professor: "Prof. Santos", course: "DIT", year: "2nd Year", section: "DIT 2-1", startTime: "08:00 AM", endTime: "09:30 AM", purpose: "Lecture / Lab" }
+        ]
+    },
+    {
+        time: "09:00 AM",
+        title: "RM 304 Reserved",
+        details: "Prof. Cruz | DIT 1-6",
+        status: "reserved",
+        rooms: [
+            { room: "RM 304", type: "Lecture Room", professor: "Prof. Cruz", course: "DIT", year: "1st Year", section: "DIT 1-6", startTime: "09:00 AM", endTime: "10:30 AM", purpose: "Lecture" }
+        ]
+    },
+    {
+        time: "10:00 AM",
+        title: "RM 306, 203, 204 Occupied",
+        details: "Various sections",
+        status: "occupied",
+        rooms: [
+            { room: "RM 306", type: "Lecture Room",  professor: "Prof. Reyes",   course: "DIT", year: "2nd Year", section: "DIT 2-3", startTime: "10:00 AM", endTime: "11:30 AM", purpose: "Lecture" },
+            { room: "RM 203", type: "Computer Lab",  professor: "Prof. Lim",     course: "DIT", year: "1st Year", section: "DIT 1-2", startTime: "10:00 AM", endTime: "12:00 PM", purpose: "Lab Work" },
+            { room: "RM 204", type: "Computer Lab",  professor: "Prof. Aquino",  course: "DIT", year: "3rd Year", section: "DIT 3-1", startTime: "10:00 AM", endTime: "11:30 AM", purpose: "Capstone Work" }
+        ]
+    },
+    {
+        time: "12:00 PM",
+        title: "Lunch break",
+        details: "Most rooms are free",
+        status: "available",
+        rooms: []
+    },
+    {
+        time: "01:00 PM",
+        title: "RM 203, 305 Occupied",
+        details: "Afternoon session",
+        status: "occupied",
+        rooms: [
+            { room: "RM 203", type: "Computer Lab", professor: "Prof. Bautista", course: "DIT", year: "2nd Year", section: "DIT 2-5", startTime: "01:00 PM", endTime: "03:00 PM", purpose: "Lab Work" },
+            { room: "RM 305", type: "Lab Room",     professor: "Prof. Dela Cruz", course: "DIT", year: "1st Year", section: "DIT 1-4", startTime: "01:00 PM", endTime: "02:30 PM", purpose: "Lab Work" }
+        ]
+    },
+    {
+        time: "03:00 PM",
+        title: "Afternoon classes ending",
+        details: "Various rooms reserved",
+        status: "reserved",
+        rooms: [
+            { room: "RM 301", type: "Lecture Room", professor: "Prof. Garcia", course: "DIT", year: "3rd Year", section: "DIT 3-2", startTime: "03:00 PM", endTime: "04:30 PM", purpose: "Lecture" }
+        ]
+    },
+    {
+        time: "05:00 PM",
+        title: "RM 104 Occupied",
+        details: "Prof. Macapagal | DIT 1-5",
+        status: "occupied",
+        rooms: [
+            { room: "RM 104", type: "Computer Lab", professor: "Prof. Macapagal", course: "DIT", year: "1st Year", section: "DIT 1-5", startTime: "05:00 PM", endTime: "07:00 PM", purpose: "Lab Work" }
+        ]
+    },
+    {
+        time: "06:00 PM",
+        title: "RM 207, 208, 210 Occupied",
+        details: "Various sections",
+        status: "occupied",
+        rooms: [
+            { room: "RM 207", type: "Lecture Room", professor: "Prof. Torres",   course: "DIT", year: "2nd Year", section: "DIT 2-4", startTime: "06:00 PM", endTime: "08:00 PM", purpose: "Lecture" },
+            { room: "RM 208", type: "Lab Room",     professor: "Prof. Flores",   course: "DIT", year: "1st Year", section: "DIT 1-3", startTime: "06:00 PM", endTime: "07:30 PM", purpose: "Lab Work" },
+            { room: "RM 210", type: "Lecture Room", professor: "Prof. Mendoza",  course: "DIT", year: "3rd Year", section: "DIT 3-3", startTime: "06:00 PM", endTime: "08:30 PM", purpose: "Thesis Defense" }
+        ]
+    },
+    {
+        time: "07:00 PM",
+        title: "AVR Reserved",
+        details: "Prof. Alvarez | DIT 2-2",
+        status: "reserved",
+        rooms: [
+            { room: "AVR", type: "Audio Visual Room", professor: "Prof. Alvarez", course: "DIT", year: "2nd Year", section: "DIT 2-2", startTime: "07:00 PM", endTime: "09:00 PM", purpose: "Special Event" }
+        ]
+    },
+    {
+        time: "08:00 PM",
+        title: "Campus closing soon",
+        details: "All rooms released by 9:30 PM",
+        status: "available",
+        rooms: []
+    }
+];
+
+/* ── Status config ───────────────────────────────────── */
+const statusConfig = {
+    available: { label: "Available" },
+    reserved:  { label: "Reserved"  },
+    occupied:  { label: "Occupied"  }
+};
+
+/* ── Date heading (always current date) ──────────────── */
+(function setDateHeading() {
+    const now    = new Date();
+    const days   = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    document.getElementById("date-heading").textContent =
+        `${days[now.getDay()]}, ${months[now.getMonth()]} ${now.getDate()} \u2013 All Rooms`;
+})();
+
+/* ── Render cards (no icon wrap) ─────────────────────── */
+(function renderCards() {
+    const list = document.getElementById("sched-list");
+
+    scheduleData.forEach((entry, index) => {
+        const cfg = statusConfig[entry.status] || statusConfig.available;
+        const timeParts = entry.time.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
+        const hhmm = timeParts ? timeParts[1] : entry.time;
+        const ampm = timeParts ? timeParts[2].toUpperCase() : "";
+
+        const card = document.createElement("div");
+        card.className = `sched-card ${entry.status}`;
+        card.dataset.index = index;
+
+        card.innerHTML = `
+            <div class="sched-time">
+                <span class="time-hhmm">${hhmm}</span>
+                <span class="time-ampm">${ampm}</span>
+            </div>
+            <div class="sched-body">
+                <div class="sched-title">${entry.title}</div>
+                <div class="sched-details">${entry.details}</div>
+            </div>
+            <span class="sched-status-label">${cfg.label}</span>
+        `;
+
+        card.addEventListener("click", () => openModal(index));
+        list.appendChild(card);
+    });
+})();
+
+/* ── Modal logic ─────────────────────────────────────── */
+const overlay   = document.getElementById("modal-overlay");
+const sheet     = document.getElementById("modal-sheet");
+const content   = document.getElementById("modal-content");
+const closeBtn  = document.getElementById("modal-close-btn");
+
+function openModal(index) {
+    const entry = scheduleData[index];
+    const cfg   = statusConfig[entry.status] || statusConfig.available;
+
+    const timeParts = entry.time.match(/^(\d{1,2}:\d{2})\s*(AM|PM)$/i);
+    const hhmm = timeParts ? timeParts[1] : entry.time;
+    const ampm = timeParts ? timeParts[2].toUpperCase() : "";
+
+    // Build header band
+    let html = `
+        <div class="modal-header-band ${entry.status}">
+            <div class="modal-band-time">
+                <span class="mbt-hhmm">${hhmm}</span>
+                <span class="mbt-ampm">${ampm}</span>
+            </div>
+            <div class="modal-band-text">
+                <div class="modal-band-title">${entry.title}</div>
+                <div class="modal-band-subtitle">${entry.details}</div>
+                <span class="modal-status-pill">${cfg.label}</span>
+            </div>
+        </div>
+    `;
+
+    // Build room detail blocks
+    if (entry.rooms && entry.rooms.length > 0) {
+        const sectionLabel = entry.rooms.length > 1 ? "Room Breakdown" : "Room Details";
+        html += `<div class="modal-section-label">${sectionLabel}</div>`;
+
+        entry.rooms.forEach(r => {
+            html += `
+                <div class="modal-room-block">
+                    <div class="modal-room-header">
+                        <span class="modal-room-name">${r.room}</span>
+                        <span class="modal-room-type">${r.type}</span>
+                    </div>
+                    <div class="modal-row">
+                        <span class="modal-row-label">Professor</span>
+                        <span class="modal-row-value">${r.professor}</span>
+                    </div>
+                    <div class="modal-row">
+                        <span class="modal-row-label">Course</span>
+                        <span class="modal-row-value">${r.course} &middot; ${r.year}</span>
+                    </div>
+                    <div class="modal-row">
+                        <span class="modal-row-label">Section</span>
+                        <span class="modal-row-value">${r.section}</span>
+                    </div>
+                    <div class="modal-row">
+                        <span class="modal-row-label">Time</span>
+                        <span class="modal-row-value">${r.startTime} &ndash; ${r.endTime}</span>
+                    </div>
+                    <div class="modal-row">
+                        <span class="modal-row-label">Purpose</span>
+                        <span class="modal-row-value">${r.purpose}</span>
+                    </div>
+                </div>
+            `;
+        });
+    } else {
+        // Available / free period — no room records
+        html += `
+            <div class="modal-section-label">Room Details</div>
+            <div class="modal-note-block">No active reservations during this period.<br>All rooms are free.</div>
+        `;
+    }
+
+    content.innerHTML = html;
+
+    // Scroll sheet to top each time
+    sheet.scrollTop = 0;
+
+    overlay.classList.add("open");
+    sheet.classList.add("open");
+    document.body.style.overflow = "hidden";
+}
+
+function closeModal() {
+    overlay.classList.remove("open");
+    sheet.classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+closeBtn.addEventListener("click", closeModal);
+overlay.addEventListener("click", closeModal);
+
+</script>
+</body>
+</html>

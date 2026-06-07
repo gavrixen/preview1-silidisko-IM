@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Home // Silid Isko</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+</head>
+<body>
+
+    <!-- ── Site Header ─────────────────────────────────────────────── -->
+    <header class="site-header">
+        <div class="header-top">
+            <div class="brand">
+                <span class="brand-icon">
+                    <iconify-icon icon="pinhead:room" width="18" height="18"></iconify-icon>
+                </span>
+                <span class="brand-name">Silid Isko</span>
+            </div>
+            <!-- TODO: Hamburger menu — opens nav drawer (not yet built) -->
+            <button class="menu-btn" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ── Main Scroll Area ─────────────────────────────────────────── -->
+    <main class="home-scroll">
+
+        <!-- Card 1: Greeting Card -->
+        <div class="home-greeting-card">
+            <div class="greeting-avatar">
+                <iconify-icon icon="mingcute:user-4-fill" width="28" height="28"></iconify-icon>
+            </div>
+            <div class="greeting-text">
+                <span class="greeting-label">Welcome back,</span>
+                <!-- TODO: Replace hardcoded name with live user data from auth session -->
+                <span class="greeting-name">{username}</span>
+            </div>
+        </div>
+
+        <!-- Card 2: Active Reservations Card -->
+        <div class="home-stat-card">
+            <div class="stat-text">
+                <span class="stat-label">Your active</span>
+                <span class="stat-title">reservations:</span>
+            </div>
+            <div class="stat-badge">
+                <!-- TODO: Replace hardcoded 0 with live reservation count from backend -->
+                <span class="stat-number">0</span>
+            </div>
+        </div>
+
+        <!-- Link Cards section label -->
+        <p class="home-section-label">Quick Access</p>
+
+        <!-- Card 3: Room Schedules -->
+        <!-- TODO: Update href to the Schedules page once it's built -->
+        <a href="scheds.html" class="home-link-card">
+            <div class="link-icon-wrap" style="background:#E8F4FD;">
+                <iconify-icon icon="typcn:calendar" width="22" height="22" style="color:#2196F3;"></iconify-icon>
+            </div>
+            <span class="link-label">Check room schedules</span>
+            <iconify-icon icon="mingcute:right-line" width="18" height="18" class="link-chevron"></iconify-icon>
+        </a>
+
+        <!-- Card 4: Room Reservation -->
+        <a href="reserve.html" class="home-link-card">
+            <div class="link-icon-wrap" style="background:#FFF3CC;">
+                <iconify-icon icon="fluent:note-add-16-filled" width="22" height="22" style="color:#E6B800;"></iconify-icon>
+            </div>
+            <span class="link-label">Reserve a room</span>
+            <iconify-icon icon="mingcute:right-line" width="18" height="18" class="link-chevron"></iconify-icon>
+        </a>
+
+        <!-- Card 5: QR Check-in -->
+        <!-- TODO: Update href to the QR Check-in page once it's built -->
+        <a href="checkin.html" class="home-link-card">
+            <div class="link-icon-wrap" style="background:#F3E8FD;">
+                <iconify-icon icon="ion:qr-code" width="22" height="22" style="color:#9C27B0;"></iconify-icon>
+            </div>
+            <span class="link-label">Check-in via QR</span>
+            <iconify-icon icon="mingcute:right-line" width="18" height="18" class="link-chevron"></iconify-icon>
+        </a>
+
+        <!-- Card 6: Activity Logs -->
+        <!-- TODO: Update href to the History & Logs page once it's built -->
+        <a href="logs.html" class="home-link-card">
+            <div class="link-icon-wrap" style="background:#FDE8E8;">
+                <iconify-icon icon="mingcute:history-fill" width="22" height="22" style="color:#E53935;"></iconify-icon>
+            </div>
+            <span class="link-label">Activity logs</span>
+            <iconify-icon icon="mingcute:right-line" width="18" height="18" class="link-chevron"></iconify-icon>
+        </a>
+
+        <!-- Card 7: Room Availability -->
+        <a href="avail.html" class="home-link-card">
+            <div class="link-icon-wrap" style="background:#D4EDDA;">
+                <iconify-icon icon="material-symbols:map" width="22" height="22" style="color:#4CAF7D;"></iconify-icon>
+            </div>
+            <span class="link-label">See room availability</span>
+            <iconify-icon icon="mingcute:right-line" width="18" height="18" class="link-chevron"></iconify-icon>
+        </a>
+
+    </main>
+
+</body>
+</html>

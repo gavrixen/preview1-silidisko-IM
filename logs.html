@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📜 Logs // Silid Isko</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════════════ */
+:root {
+    --bg-cream:    #F0EDE6;
+    --bg-header:   #1A1A1A;
+    --text-dark:   #1A1A1A;
+    --text-mid:    #555;
+    --text-light:  #888;
+    --nav-h:       68px;
+
+    /* reserved */
+    --res-bg:     #FFF3CC;
+    --res-icon:   #E6B800;
+    --res-text:   #7A5A00;
+    --res-border: #F0D878;
+
+    /* occupied */
+    --occ-bg:     #EDEDED;
+    --occ-icon:   #999;
+    --occ-text:   #555;
+    --occ-border: #D0D0D0;
+
+    /* cancelled — new token */
+    --can-bg:     #FDECEA;
+    --can-icon:   #E53935;
+    --can-text:   #C62828;
+    --can-border: #F5C6C5;
+}
+
+/* ═══════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Epilogue', sans-serif;
+    background: var(--bg-cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════════
+   SITE HEADER (sticky)
+   ═══════════════════════════════════════════════════════ */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg-header);
+    color: #fff;
+    padding: 0 16px;
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 52px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.brand-icon {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-name {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+.back-link {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    padding-bottom: 8px;
+    letter-spacing: 0.1px;
+}
+
+.back-link:hover { color: rgba(255,255,255,0.9); }
+
+.header-title-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 0 18px;
+}
+
+.header-title-icon {
+    width: 52px;
+    height: 52px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.header-title-text {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN SCROLL AREA
+   ═══════════════════════════════════════════════════════ */
+.logs-scroll {
+    padding: 20px 16px calc(var(--nav-h) + 24px);
+    min-height: calc(100vh - 140px);
+}
+
+/* ═══════════════════════════════════════════════════════
+   LOG CARD
+   ═══════════════════════════════════════════════════════ */
+.log-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.log-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 16px;
+    padding: 14px 14px 32px; /* extra bottom for status label */
+    border: 1.5px solid #E8E4DC;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.log-card:active {
+    transform: scale(0.98);
+    box-shadow: none;
+}
+
+/* Status-based card backgrounds and borders */
+.log-card.reserved  { background: var(--res-bg);  border-color: var(--res-border); }
+.log-card.occupied  { background: var(--occ-bg);  border-color: var(--occ-border); }
+.log-card.cancelled { background: var(--can-bg);  border-color: var(--can-border); }
+
+/* Icon wrap */
+.log-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.log-card.reserved  .log-icon-wrap { background: rgba(255,255,255,0.6); color: var(--res-icon); }
+.log-card.occupied  .log-icon-wrap { background: rgba(255,255,255,0.6); color: var(--occ-icon); }
+.log-card.cancelled .log-icon-wrap { background: rgba(255,255,255,0.6); color: var(--can-icon); }
+
+/* Body text */
+.log-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.log-action {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.log-room {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    margin-bottom: 2px;
+}
+
+.log-detail {
+    font-size: 11.5px;
+    font-weight: 400;
+    color: var(--text-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Date + time — right-aligned */
+.log-datetime {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+    gap: 2px;
+}
+
+.log-date {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-mid);
+    white-space: nowrap;
+}
+
+.log-time {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-light);
+    white-space: nowrap;
+}
+
+/* Status label (bottom-right) */
+.log-status-label {
+    position: absolute;
+    bottom: 10px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    padding: 3px 8px;
+    background: rgba(255,255,255,0.65);
+}
+
+.log-card.reserved  .log-status-label { color: var(--res-text);  border: 1px solid var(--res-border);  }
+.log-card.occupied  .log-status-label { color: var(--occ-text);  border: 1px solid var(--occ-border);  }
+.log-card.cancelled .log-status-label { color: var(--can-text);  border: 1px solid var(--can-border);  }
+
+/* Empty state */
+.log-empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════════════
+   BOTTOM NAVIGATION BAR
+   ═══════════════════════════════════════════════════════ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-h);
+    background: var(--bg-header);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 4px;
+    z-index: 100;
+}
+
+.nav-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255,255,255,0.45);
+    padding: 8px 0;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+
+.nav-btn.active { color: #fff; }
+.nav-btn iconify-icon { font-size: 24px; }
+
+</style>
+
+<!-- ════════════════════════════════════════════════════
+     END OF STYLES — HTML CONTENT BEGINS BELOW
+     ════════════════════════════════════════════════════ -->
+
+<body>
+
+    <!-- ── SITE HEADER ─────────────────────────────── -->
+    <header class="site-header">
+        <div class="header-top">
+            <a href="#" class="brand">
+                <div class="brand-icon">
+                    <iconify-icon icon="pinhead:room" width="18" style="color:#1A1A1A;"></iconify-icon>
+                </div>
+                <span class="brand-name">Silid Isko</span>
+            </a>
+            <button class="hamburger-btn" aria-label="Menu">
+                <iconify-icon icon="mingcute:menu-line" width="22"></iconify-icon>
+            </button>
+        </div>
+
+        <a href="index.html" class="back-link">&lt; Back to homepage</a>
+
+        <div class="header-title-row">
+            <div class="header-title-icon">
+                <iconify-icon icon="mingcute:history-fill" width="22" style="color:#fff;"></iconify-icon>
+            </div>
+            <div class="header-title-text">Activity<br>Logs</div>
+        </div>
+    </header>
+
+    <!-- ── MAIN SCROLL AREA ────────────────────────── -->
+    <main class="logs-scroll">
+        <div class="log-list" id="log-list">
+            <!-- Cards generated by JS -->
+        </div>
+    </main>
+
+    <!-- ── BOTTOM NAVIGATION BAR ───────────────────── -->
+    <nav class="bottom-nav">
+        <a href="scheds.html" class="nav-btn" aria-label="Schedules">
+            <iconify-icon icon="typcn:calendar"></iconify-icon>
+        </a>
+        <a href="reserve.html" class="nav-btn" aria-label="Reservation">
+            <iconify-icon icon="fluent:note-add-16-filled"></iconify-icon>
+        </a>
+        <a href="#" class="nav-btn" aria-label="QR Check-in">
+            <iconify-icon icon="ion:qr-code"></iconify-icon>
+        </a>
+        <a href="logs.html" class="nav-btn active" aria-label="History & Logs">
+            <iconify-icon icon="mingcute:history-fill"></iconify-icon>
+        </a>
+        <a href="avail.html" class="nav-btn" aria-label="Room Availability">
+            <iconify-icon icon="material-symbols:map"></iconify-icon>
+        </a>
+    </nav>
+
+<!-- ════════════════════════════════════════════════════
+     END OF HTML — JAVASCRIPT BEGINS BELOW
+     ════════════════════════════════════════════════════ -->
+<script>
+
+// TODO: Replace this hardcoded array with a fetch() call to the backend API
+// when it is ready. Filter results server-side by the logged-in user's ID.
+// Join the `reservation` and `attendance_log` tables, sorted by confirmed_at DESC.
+const historyData = [
+    {
+        action:  "Room Reserved",
+        room:    "RM 303",
+        detail:  "Prof. Santos | DIT 2-1",
+        date:    "June 8, 2026",
+        time:    "09:00 AM",
+        status:  "reserved"
+    },
+    {
+        action:  "Checked In",
+        room:    "RM 303",
+        detail:  "Prof. Santos | DIT 2-1",
+        date:    "June 8, 2026",
+        time:    "10:05 AM",
+        status:  "occupied"
+    },
+    {
+        action:  "Reservation Cancelled",
+        room:    "RM 304",
+        detail:  "Prof. Cruz | DIT 1-6",
+        date:    "June 7, 2026",
+        time:    "02:00 PM",
+        status:  "cancelled"
+    },
+    {
+        action:  "Room Reserved",
+        room:    "AVR",
+        detail:  "Prof. Alvarez | DIT 2-2",
+        date:    "June 6, 2026",
+        time:    "07:00 PM",
+        status:  "reserved"
+    },
+    {
+        action:  "Checked In",
+        room:    "AVR",
+        detail:  "Prof. Alvarez | DIT 2-2",
+        date:    "June 6, 2026",
+        time:    "07:12 PM",
+        status:  "occupied"
+    }
+];
+
+/* ── Status config ───────────────────────────────────── */
+const statusConfig = {
+    reserved:  { icon: "fluent:note-add-16-filled", label: "Reserved"   },
+    occupied:  { icon: "mingcute:door-fill",         label: "Checked In" },
+    cancelled: { icon: "mingcute:close-fill",        label: "Cancelled"  }
+};
+
+/* ── Render log cards ────────────────────────────────── */
+(function renderLogs() {
+    const list = document.getElementById("log-list");
+
+    if (!historyData || historyData.length === 0) {
+        list.innerHTML = `<div class="log-empty">No activity logged yet.</div>`;
+        return;
+    }
+
+    historyData.forEach(entry => {
+        const cfg = statusConfig[entry.status] || statusConfig.reserved;
+
+        const card = document.createElement("div");
+        card.className = `log-card ${entry.status}`;
+
+        card.innerHTML = `
+            <div class="log-icon-wrap">
+                <iconify-icon icon="${cfg.icon}" width="22"></iconify-icon>
+            </div>
+            <div class="log-body">
+                <div class="log-action">${entry.action}</div>
+                <div class="log-room">${entry.room}</div>
+                <div class="log-detail">${entry.detail}</div>
+            </div>
+            <div class="log-datetime">
+                <span class="log-date">${entry.date}</span>
+                <span class="log-time">${entry.time}</span>
+            </div>
+            <span class="log-status-label">${cfg.label}</span>
+        `;
+
+        list.appendChild(card);
+    });
+})();
+
+</script>
+</body>
+</html>
